@@ -1,0 +1,78 @@
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+
+namespace GestorDeMedicamentos
+{
+    public partial class Form1 : Form
+    {
+        private List<Medicamento> medicamentos;
+
+        public Form1()
+        {
+            InitializeComponent();
+            medicamentos = new List<Medicamento>();
+        }
+
+        private void btnAgregar_Click(object sender, EventArgs e)
+        {
+            string nombre = txtNombre.Text;
+            string cantidad = txtCantidad.Text;
+            string descripcion = txtDescripcion.Text;
+
+            if (!string.IsNullOrEmpty(nombre) && !string.IsNullOrEmpty(cantidad))
+            {
+                Medicamento medicamento = new Medicamento
+                {
+                    Nombre = nombre,
+                    Cantidad = cantidad,
+                    Descripcion = descripcion
+                };
+
+                medicamentos.Add(medicamento);
+                ActualizarLista();
+                LimpiarCampos();
+            }
+            else
+            {
+                MessageBox.Show("Por favor, complete los campos Nombre y Cantidad.");
+            }
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            if (lstMedicamentos.SelectedIndex != -1)
+            {
+                medicamentos.RemoveAt(lstMedicamentos.SelectedIndex);
+                ActualizarLista();
+            }
+            else
+            {
+                MessageBox.Show("Por favor, seleccione un medicamento para eliminar.");
+            }
+        }
+
+        private void ActualizarLista()
+        {
+            lstMedicamentos.Items.Clear();
+            foreach (var medicamento in medicamentos)
+            {
+                lstMedicamentos.Items.Add($"{medicamento.Nombre} - {medicamento.Cantidad} - {medicamento.Descripcion}");
+            }
+        }
+
+        private void LimpiarCampos()
+        {
+            txtNombre.Text = "";
+            txtCantidad.Text = "";
+            txtDescripcion.Text = "";
+        }
+    }
+
+    public class Medicamento
+    {
+        public string Nombre { get; set; }
+        public string Cantidad { get; set; }
+        public string Descripcion { get; set; }
+    }
+}
